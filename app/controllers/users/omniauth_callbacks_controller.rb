@@ -10,5 +10,5 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       #FLAG ? ? ? - undefined new_user_registration_url
       redirect_to new_user_registration_url
     end
-  end
+  end 
 end
