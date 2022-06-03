@@ -1,6 +1,6 @@
 class VenueController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show, :welcome, :privacy]
-
+  before_action :set_venue, only: [ ]
   def welcome
     @venue = Venue.first
     authorize @venue
@@ -67,6 +67,10 @@ class VenueController < ApplicationController
   end
 
   private
+
+  def set_venue
+    @venue = Venue.find(params[:id])
+  end
 
   def update_venue_params
     params.require(:venue).permit(:description, :music_genre, :instagram_handle, :pricing, :capacity, :rating, :review_count, :photo)

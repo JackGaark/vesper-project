@@ -1,0 +1,15 @@
+2022-06-03 18:30:33.175 EDT [2526] LOG:  starting PostgreSQL 14.3 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 13.0.0 (clang-1300.0.29.30), 64-bit
+2022-06-03 18:30:33.178 EDT [2526] LOG:  listening on IPv6 address "::1", port 5432
+2022-06-03 18:30:33.178 EDT [2526] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-06-03 18:30:33.178 EDT [2526] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2022-06-03 18:30:33.181 EDT [2527] LOG:  database system was shut down at 2022-06-03 18:29:17 EDT
+2022-06-03 18:30:33.184 EDT [2526] LOG:  database system is ready to accept connections
+2022-06-03 18:31:03.111 EDT [2797] FATAL:  database "vesper_development" does not exist
+2022-06-03 18:32:09.631 EDT [3337] ERROR:  database "vesper_development" already exists
+2022-06-03 18:32:09.631 EDT [3337] STATEMENT:  CREATE DATABASE "vesper_development" ENCODING = 'unicode'
+2022-06-03 18:32:09.634 EDT [3338] ERROR:  database "vesper_test" already exists
+2022-06-03 18:32:09.634 EDT [3338] STATEMENT:  CREATE DATABASE "vesper_test" ENCODING = 'unicode'
+2022-06-03 18:45:12.904 EDT [4069] ERROR:  database "vesper_development" already exists
+2022-06-03 18:45:12.904 EDT [4069] STATEMENT:  CREATE DATABASE "vesper_development" ENCODING = 'unicode'
+2022-06-03 18:45:12.911 EDT [4070] ERROR:  database "vesper_test" already exists
+2022-06-03 18:45:12.911 EDT [4070] STATEMENT:  CREATE DATABASE "vesper_test" ENCODING = 'unicode'

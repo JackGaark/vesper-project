@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.4.4'
+ruby '2.6.10'
 
 
 gem 'dotenv-rails', groups: [:development, :test]
@@ -12,6 +12,7 @@ gem 'pg', '~> 0.21'
 gem 'puma'
 gem 'rails', '5.2.0'
 gem 'redis'
+gem 'sass'
 
 gem 'koala' #Interact with the FB graph api
 
