@@ -7,6 +7,7 @@ gem 'bootsnap', require: false
 gem 'devise'
 gem 'figaro'
 gem 'omniauth-facebook'
+gem 'omniauth-rails_csrf_protection'
 gem 'jbuilder', '~> 2.0'
 gem 'pg', '~> 0.21'
 gem 'puma'
