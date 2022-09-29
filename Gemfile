@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.6.10'
+ruby ' 3.1.6'
 
 
 gem 'dotenv-rails', groups: [:development, :test]
@@ -7,11 +7,11 @@ gem 'bootsnap', require: false
 gem 'devise'
 gem 'figaro'
 gem 'omniauth-facebook'
-gem 'omniauth-rails_csrf_protection'
+gem 'omniauth-rails_csrf_protection', '~> 0.1'
 gem 'jbuilder', '~> 2.0'
-gem 'pg', '~> 0.21'
+gem 'pg', '~> 1.1'
 gem 'puma'
-gem 'rails', '5.2.0'
+gem 'rails', '~> 6.0'
 gem 'redis'
 gem 'sass'
 

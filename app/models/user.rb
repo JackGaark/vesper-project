@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  devise :omniauthable, omniauth_providers: %i[facebook]
+  devise :omniauthable, omniauth_providers: [:facebook]
 
   has_many :squads
   has_many :squadmembers
@@ -37,4 +37,3 @@ class User < ApplicationRecord
     @facebook ||= Koala::Facebook::API.new(token)
   end
 end
-
