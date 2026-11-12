@@ -1,5 +1,5 @@
 Cloudinary.config do |config|
-  config.cloud_name = "dzzdoq1bq"
-  config.api_key = "664422289868811"
-  config.api_secret = "r3W_73Fsr1ldlxCx9kEd3GzAI4g"
+  config.cloud_name = ENV['CLOUDINARY_CLOUD_NAME']
+  config.api_key = ENV['CLOUDINARY_API_KEY']
+  config.api_secret = ENV['CLOUDINARY_API_SECRET']
 end

@@ -2,17 +2,19 @@
   "name": "vesper",
   "private": true,
   "dependencies": {
-    "@rails/ujs": "^6.0.2-2",
-    "@rails/webpacker": "3.5",
+    "autoprefixer": "^10.4.12",
     "bootstrap": "3",
     "gmaps": "^0.4.24",
     "jquery": "^3.3.1",
+    "postcss": "^8.4.17",
+    "postcss-cli": "^10.0.0",
+    "postcss-nesting": "^10.2.0",
     "progressbar.js": "^1.0.1"
   },
-  "devDependencies": {
-    "webpack-dev-server": "2.11.2"
-  },
   "scripts": {
-    "heroku-prebuild": "yarn install --dev"
+    "build": "esbuild app/javascript/entry.js --bundle --outfile=app/assets/builds/vesper.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }

@@ -3,13 +3,11 @@ Rails.application.routes.draw do
   devise_for :users,
     controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 
-  get 'squadmember/create'
 
   root to: 'venue#welcome'
 
   resources :venue, { except: [:destroy] }
   resources :squad, { only: [:edit, :show, :update, :create] } do
-    resource :squadmember, { only: [:create] }
   end
 
   post '/squad/:id/package/:package_id', to: 'squad#update_package', as: 'squad_package'

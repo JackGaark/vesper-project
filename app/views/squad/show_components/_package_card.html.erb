@@ -4,7 +4,7 @@
         <div class="card-index-picture mdl-card__title" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.2)), url('https://loremflickr.com/320/240/food');">
         <% else %>
         <div class="card-index-picture mdl-card__title" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.2)),
-        url('<%= cl_image_path listing.photo, height: 300, width: 400, crop: :fill %>')">
+        url('<%= photo_url package.photo, height: 300, width: 400, crop: :fill %>')">
       <% end %>
         <div class="card-index-title mdl-card__title-text"><%= package.name %></div>
       </div>

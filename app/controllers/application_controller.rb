@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
 
   include Pundit::Authorization
+  rescue_from Pundit::NotAuthorizedError, with: :forbidden
 
   # Pundit: white-list approach.
   after_action :verify_authorized, except: :index, unless: :skip_pundit?
@@ -26,6 +27,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def forbidden
+    head :forbidden
+  end
 
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."

@@ -21,8 +21,11 @@
     <div class="button-backgrounds"><a id="browse-main-btn" class="welcome-button button1" href="/venue" style="bottom: 24px"></a></div>
 
     <% else %>
-      <%= link_to omniauth_authorize_path(:user, :facebook) do %>
-        <div class="fb-login-btn mdl-shadow--2dp"><i class="fab fa-facebook-square"></i> Continue with Facebook</div>
+      <%= link_to 'Browse venues', venue_index_path, class: 'welcome-button' %>
+      <%= link_to 'Sign in', new_user_session_path, class: 'welcome-button' %>
+      <%= link_to 'Create account', new_user_registration_path, class: 'welcome-button' %>
+      <% if ENV['FB_ID'].present? && ENV['FB_SECRET'].present? %>
+        <%= button_to 'Continue with Facebook', omniauth_authorize_path(:user, :facebook), method: :post, class: 'fb-login-btn' %>
       <% end %>
     <% end %>
 

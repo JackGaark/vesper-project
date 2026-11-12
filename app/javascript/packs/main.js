@@ -3,7 +3,7 @@ const frontPage = document.getElementById('banner-landing-main');
 if (frontPage == null) {
   const navbar = document.querySelector('.navbar-wagon')
 
-  navbar.removeAttribute("hidden");
+  if (navbar) navbar.removeAttribute("hidden");
 
 }
 

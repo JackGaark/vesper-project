@@ -56,53 +56,6 @@
   </div> <!-- contribution info -->
 </div> <!-- body end -->
 
-<div class="progress-btn-container">
-      <div class="svg-wrapper" id="qr-code">
-        <svg height="40" width="150" xmlns="http://www.w3.org/2000/svg">
-          <rect id="shape" height="40" width="150" />
-          <div id="text">
-            <a class="mint" style="font-size: 15px;"><span class="spot"></span>
-              Get QR Code
-            </a>
-          </div>
-        </svg>
-      </div>
+<div class="container text-center">
+  <p>This is a plan only. No reservation or payment has been made.</p>
 </div>
-
-  <dialog class="mdl-dialog">
-    <h4 class="mdl-dialog__title" style="color: #030027  ">Gratz!</h4>
-    <div class="mdl-dialog__content">
-      <p style="font-size: 15px;">
-        Please present this code at the door
-      </p>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/220px-QR_code_for_mobile_English_Wikipedia.svg.png" alt="">
-    </div>
-    <div class="mdl-dialog__actions">
-      <button type="button" class="mdl-button close">Close</button>
-      <!-- <button type="button" class="mdl-button">Disagree</button> -->
-    </div>
-  </dialog>
-
-   <script>
-    var dialog = document.querySelector('dialog');
-    var showDialogButton = document.querySelector('#qr-code');
-    if (! dialog.showModal) {
-      dialogPolyfill.registerDialog(dialog);
-    }
-    // document.addEventListener('DOMContentLoaded', function() {
-    //   dialog.showModal();
-    // });
-    showDialogButton.addEventListener('click', (event) => {
-      dialog.showModal();
-    });
-    dialog.querySelector('.close').addEventListener('click', function() {
-      dialog.close();
-    });
-  </script>
-
-
-
-
-
-
-

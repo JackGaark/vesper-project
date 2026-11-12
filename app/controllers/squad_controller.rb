@@ -1,32 +1,28 @@
 class SquadController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:create]
   before_action :set_squad, only: [:show, :edit]
 
   def edit
-    @squadTotalContribution = find_squad_total_contribution
-    @squad = Squad.find(params[:id])
     authorize @squad
+    @squadTotalContribution = find_squad_total_contribution
+    @squadmember = @squad.squadmembers.find_by!(user: current_user)
     render 'squad/edit'
   end
 
   #AJAX REQUEST
   def create
-
     @squad = Squad.new(user: current_user)
     authorize @squad
-
-    @squad.save!
-
-    # binding.pry
-
-    params[:chosenVenues].each do |venue_id|
-      Squadchosenvenue.new(squad: @squad, venue_id: venue_id).save!
+    ids = Array(params[:chosenVenues]).map(&:to_s)
+    venues = Venue.where(id: ids)
+    if ids.empty? || ids.uniq.size != ids.size || venues.count != ids.size
+      return render json: { error: 'Select valid, distinct venues' }, status: :unprocessable_entity
     end
-
-    Squadmember.new(user: current_user, squad: @squad).save!
-
+    Squad.transaction do
+      @squad.save!
+      venues.each { |venue| @squad.squadchosenvenues.create!(venue: venue) }
+      @squad.squadmembers.create!(user: current_user, contribution: 0)
+    end
     render json: @squad
-    # redirect_to edit_squad(@squad)
   end
 
   def add_sidekick
@@ -50,8 +46,9 @@ class SquadController < ApplicationController
 
     authorize @squadmember
 
-    @squadmember.squadchosenvenue_id = params[:squadchosenvenue_id].to_i
-    @squadmember.save!
+    choice = @squad.squadchosenvenues.find_by(id: params[:squadchosenvenue_id])
+    return render json: { error: 'Invalid venue choice' }, status: :unprocessable_entity unless choice
+    @squadmember.update!(squadchosenvenue: choice)
 
     if true #passed validations
       render json: { squad: @squad, squadmembers: @squad.squadmembers, status: venue_progess_ready? }
@@ -71,9 +68,9 @@ class SquadController < ApplicationController
   def member_choose_contribution
     @squad = Squad.find(params[:id])
     @squadmember = @squad.squadmembers.find(params[:squad_member_id])
-    @squadChosenVenue = find_squad_chosen_venue
-
     authorize @squadmember
+    @squadChosenVenue = find_squad_chosen_venue
+    return redirect_to member_choose_venue_path(@squad, @squadmember), alert: 'Choose a venue first.' unless @squadChosenVenue
   end
 
   def member_confirm_contribution
@@ -84,9 +81,9 @@ class SquadController < ApplicationController
 
     if params[:currentaction] != 'status'
       # binding.pry
-      @squadmember.contribution = params[:contribution].to_i
-      @squadmember.will_be_present = true
-      @squadmember.save!
+      contribution = Integer(params[:contribution].to_s, exception: false)
+      return render json: { error: 'Contribution must be a positive whole number' }, status: :unprocessable_entity unless contribution && contribution > 0
+      @squadmember.update!(contribution: contribution, will_be_present: true)
 
     end
     # binding.pry
@@ -103,46 +100,39 @@ class SquadController < ApplicationController
 
   #AJAX REQUESTS
   def update
-    # AJAX REQUESTS
-    # look for email in users
-    #if exists
-    if params[:adding_user_id].nil?
-      user = User.find_by("email = '#{params[:email]}'")
-    else
-      user = User.find(params[:adding_user_id])
-    end
-
-    @squad = Squad.find(params[:id]) #TODO : something along those lines
+    @squad = Squad.find(params[:id])
     authorize @squad
-    @squadmember = Squadmember.new(user: user, squad: @squad, contribution: 0) #TODO : something along those lines
-    @squadmember.save!
-    respond_to do |format|
-      format.js
-    end
+    user = params[:adding_user_id].present? ? User.find_by(id: params[:adding_user_id]) : User.find_by(email: params[:email])
+    return head :unprocessable_entity unless user
+    @squadmember = @squad.squadmembers.new(user: user, contribution: 0)
+    return head :unprocessable_entity unless @squadmember.save
+    respond_to { |format| format.js }
   end
+
   #AJAX REQUESTS
 
   def confirm_squad_member
-   @squad = Squad.find(params[:id])
-
-   squadmember = @squad.squadmembers.find_by(user: current_user)
-   squadmember.squadchosenvenue_id = params[:squadchosenvenue_id].to_i
-   squadmember.contribution = params[:contribution].to_i
-   squadmember.will_be_present = params[:will_be_present]
-   squadmember.save!
-
-   authorize squadmember
-
-   render json: @squad
+    @squad = Squad.find(params[:id])
+    squadmember = @squad.squadmembers.find_by!(user: current_user)
+    authorize squadmember
+    choice = @squad.squadchosenvenues.find_by(id: params[:squadchosenvenue_id])
+    contribution = Integer(params[:contribution].to_s, exception: false)
+    return render json: { error: 'Invalid selection' }, status: :unprocessable_entity unless choice && contribution && contribution > 0
+    squadmember.update!(squadchosenvenue: choice, contribution: contribution, will_be_present: params[:will_be_present])
+    render json: @squad
   end
 
   def show
     @squad = Squad.find(params[:id])
-    @squadChosenVenue = find_squad_chosen_venue
-    @squadTotalContribution = find_squad_total_contribution
-    @yourContribution = @squad.squadmembers.find_by(user: current_user).contribution
-    # raise
     authorize @squad
+    @squadChosenVenue = find_squad_chosen_venue
+    unless @squadChosenVenue
+      member = @squad.squadmembers.find_by(user: current_user)
+      return redirect_to(member_choose_venue_path(@squad, member), alert: 'Choose a venue first.') if member
+      return head :unprocessable_entity
+    end
+    @squadTotalContribution = find_squad_total_contribution
+    @yourContribution = @squad.squadmembers.find_by(user: current_user)&.contribution.to_i
   end
 
   # AJAX REQUESTS
@@ -163,9 +153,12 @@ class SquadController < ApplicationController
   # AJAX REQUESTS
   def update_package
     @squad = Squad.find(params[:id])
-    @package = Package.find(params[:package_id])
-    @squad.update(package_id: @package.id)
     authorize @squad
+    chosen = find_squad_chosen_venue
+    return head :unprocessable_entity unless chosen
+    @package = chosen.venue.packages.find_by(id: params[:package_id])
+    return head :unprocessable_entity unless @package
+    @squad.update!(package: @package)
 
     respond_to do |format|
       format.js
@@ -211,7 +204,7 @@ class SquadController < ApplicationController
       end
     end
     vote_result = vote_results.max_by{|k,v| v}
-    return Squadchosenvenue.find(vote_result[0])
+    vote_result && @squad.squadchosenvenues.find_by(id: vote_result[0])
   end
 
   def find_squad_total_contribution

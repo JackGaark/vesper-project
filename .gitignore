@@ -17,3 +17,7 @@ yarn-error.log
 /config/application.yml
 .env.development
 .env.production
+
+/config/master.key
+/app/assets/builds/*
+!/app/assets/builds/.keep

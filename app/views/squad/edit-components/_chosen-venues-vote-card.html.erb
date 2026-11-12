@@ -6,7 +6,7 @@
 <div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-0">
 <div class="blog-card mdl-shadow--2dp" data-venue-name="<%= chosen_venue.name %>" data-venue-id="<%= venue.id %>"
   style="background: linear-gradient(to left bottom, rgba(5, 25, 55, 0.9), rgba(17, 23, 58, 0.8), rgba(31, 18, 60, 0.7), rgba(44, 11, 58, 0.6), rgba(56, 0, 54, 0.5)),
-    url('<%= cl_image_path chosen_venue.photo, with: 300, height: 400, crop: 'fill'; %>') no-repeat center;
+    url('<%= photo_url chosen_venue.photo, with: 300, height: 400, crop: 'fill'; %>') no-repeat center;
     /*background-color: ;*/
     /*background-blend-mode: multiply;*/
 
