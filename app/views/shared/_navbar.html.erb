@@ -122,8 +122,8 @@
       <!-- Login link (when logged out) -->
       <%#= link_to t(".sign_in", default: "Login"), new_user_session_path, class: "navbar-wagon-item navbar-wagon-link" %>
 
-      <%= link_to omniauth_authorize_path(:user, :facebook) do %>
-        <div class="fb-login-btn mdl-shadow--2dp"><i class="fab fa-facebook-square"></i> Continue with Facebook</div>
+      <% if ENV['FB_ID'].present? && ENV['FB_SECRET'].present? %>
+        <%= button_to 'Continue with Facebook', omniauth_authorize_path(:user, :facebook), method: :post, class: 'fb-login-btn mdl-shadow--2dp' %>
       <% end %>
 
 
