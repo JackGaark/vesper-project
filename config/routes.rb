@@ -6,8 +6,8 @@ Rails.application.routes.draw do
 
   root to: 'venue#welcome'
 
-  resources :venue, { except: [:destroy] }
-  resources :squad, { only: [:edit, :show, :update, :create] } do
+  resources :venue, except: [:destroy]
+  resources :squad, only: [:edit, :show, :update, :create] do
   end
 
   post '/squad/:id/package/:package_id', to: 'squad#update_package', as: 'squad_package'

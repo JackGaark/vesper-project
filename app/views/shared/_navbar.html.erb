@@ -3,10 +3,9 @@
   <% if user_signed_in? %>
   <div class="navbar-wagon-item">
     <div class="dropdown">
-      <div class="navbar-wagon-brand dropdown-toggle glo-up-nav" id="navbar-wagon-menu" data-toggle="dropdown">
-      V </div>
+      <button type="button" class="navbar-wagon-brand dropdown-toggle glo-up-nav" id="navbar-wagon-menu" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navbar-menu-items">V</button>
 
-      <ul class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">
+      <ul id="navbar-menu-items" class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">
         <li>
           <%= link_to "/" do %>
           <i class="fas fa-home"></i> <%= t(".profile", default: "Home") %>

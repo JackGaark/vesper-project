@@ -1,4 +1,6 @@
 ENV['RAILS_ENV'] ||= 'test'
+ENV['FB_ID'] ||= 'test-facebook-id'
+ENV['FB_SECRET'] ||= 'test-facebook-secret'
 require_relative '../config/environment'
 require 'rails/test_help'
 

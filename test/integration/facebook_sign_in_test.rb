@@ -34,9 +34,8 @@ class FacebookSignInTest < ActionDispatch::IntegrationTest
     post user_facebook_omniauth_authorize_path, params: { authenticity_token: token }
     assert_response :redirect
     assert_match %r{\Ahttps://(www\.)?facebook\.com/}, response.location
-    assert_raises(ActionController::InvalidAuthenticityToken) do
-      post user_facebook_omniauth_authorize_path
-    end
+    post user_facebook_omniauth_authorize_path
+    assert_response :unprocessable_entity
   ensure
     ENV['FB_ID'], ENV['FB_SECRET'] = previous_id, previous_secret
     ActionController::Base.allow_forgery_protection = previous_protection

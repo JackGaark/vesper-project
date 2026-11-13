@@ -5,7 +5,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-Dotenv::Railtie.load if defined? Dotenv
+Dotenv::Rails.load if defined?(Dotenv::Rails)
 
 module Vesper
   class Application < Rails::Application
