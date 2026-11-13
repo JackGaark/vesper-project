@@ -24,4 +24,22 @@ class FacebookSignInTest < ActionDispatch::IntegrationTest
   ensure
     ENV['FB_ID'], ENV['FB_SECRET'] = previous_id, previous_secret
   end
+  test 'Facebook request accepts a Rails CSRF token and rejects a missing token' do
+    previous_id, previous_secret = ENV['FB_ID'], ENV['FB_SECRET']
+    previous_protection = ActionController::Base.allow_forgery_protection
+    ENV['FB_ID'], ENV['FB_SECRET'] = 'test-id', 'test-secret'
+    ActionController::Base.allow_forgery_protection = true
+    get new_user_session_path
+    token = css_select('form[action="/users/auth/facebook"] input[name="authenticity_token"]').first['value']
+    post user_facebook_omniauth_authorize_path, params: { authenticity_token: token }
+    assert_response :redirect
+    assert_match %r{\Ahttps://(www\.)?facebook\.com/}, response.location
+    assert_raises(ActionController::InvalidAuthenticityToken) do
+      post user_facebook_omniauth_authorize_path
+    end
+  ensure
+    ENV['FB_ID'], ENV['FB_SECRET'] = previous_id, previous_secret
+    ActionController::Base.allow_forgery_protection = previous_protection
+  end
+
 end
